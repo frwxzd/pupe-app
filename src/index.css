@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Lato", "Source Sans Pro", system-ui, sans-serif;
+  --color-fondo: #F4F7FA;
+  --color-navbar: #1E242B;
+  --color-titulo: #003B5C;
+  --color-titulo-osc: #002B49;
+  --color-acento: #00B5E2;
+  --color-acento-osc: #008FB8;
+  --color-dorado: #C9A227;
+  --color-texto: #17212B;
+  --color-lima: #8DC63F;
+  --color-verde: #157A5B;
+  --color-naranja: #E07A2E;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    @apply bg-fondo text-texto font-sans antialiased;
+    background-image:
+      radial-gradient(circle at 12% 0%, rgba(0, 181, 226, 0.07), transparent 30%),
+      radial-gradient(circle at 88% 6%, rgba(0, 59, 92, 0.06), transparent 28%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3 { @apply text-titulo font-bold; }
+  ::selection { background: rgba(0, 181, 226, 0.22); }
+  :focus-visible { outline: 3px solid var(--color-acento); outline-offset: 2px; }
+}
+
+@utility card { @apply bg-white rounded-2xl border border-slate-200/80 shadow-[0_10px_30px_rgba(15,23,42,0.06)]; }
+@utility card-hover { @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.10)]; }
+@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 min-h-11 font-bold text-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed; }
+@utility btn-primary { @apply btn bg-acento text-white shadow-[0_8px_20px_rgba(0,181,226,0.25)] hover:bg-acento-osc hover:shadow-[0_10px_24px_rgba(0,181,226,0.32)]; }
+@utility btn-secondary { @apply btn bg-white text-titulo border border-slate-200 hover:border-acento/50 hover:bg-cyan-50/40; }
+@utility btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+@utility btn-success { @apply btn bg-emerald-600 text-white hover:bg-emerald-700; }
+@utility label { @apply block text-sm font-bold text-titulo mb-1.5; }
+@utility input { @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 min-h-11 text-sm outline-none transition-all focus:border-acento focus:ring-4 focus:ring-acento/10; }
+@utility field-error { @apply text-xs text-red-600 mt-1.5; }
+@utility page { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 md:py-10; }
+@utility page-title { @apply text-2xl md:text-3xl font-black tracking-tight text-titulo; }
+@utility eyebrow { @apply text-[11px] font-black uppercase tracking-[0.18em] text-acento-osc; }
+@utility section-title { @apply text-xl md:text-2xl font-black tracking-tight text-titulo; }
+
+@layer base {
+  textarea.input { padding-top: 0.65rem; padding-bottom: 0.65rem; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-fade-up { animation: fade-up 0.45s ease-out both; }
+
+/* Reporte mensual */
+.report-title { font-size: 1.05rem; font-weight: 900; color: var(--color-titulo); margin-bottom: 0.75rem; }
+.report-section { margin-bottom: 2rem; }
+.report-empty { font-size: 0.875rem; color: #94a3b8; }
+.report-table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
+.report-table th { text-align: left; background: var(--color-navbar); color: white; padding: 0.45rem 0.6rem; font-weight: 700; }
+.report-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+
+@media print {
+  header, nav, footer, .no-print { display: none !important; }
+  body { background: white; }
+  @page { size: letter; margin: 14mm 12mm; }
+  .report.page { padding: 0 !important; max-width: none !important; }
+  .report-sheet { border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+  .report-item, .report-table tr { break-inside: avoid; }
+  .report-title { break-after: avoid; }
+  .report-table th, .report-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .report a { color: inherit; text-decoration: none; }
+}
+
+/* Botón flotante "Regresar": degradado institucional que se desplaza al pasar el cursor. */
+.back-tab {
+  background-image: linear-gradient(120deg, var(--color-titulo-osc) 0%, var(--color-titulo) 35%, var(--color-acento-osc) 70%, var(--color-acento) 100%);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  transition: background-position 0.5s ease, box-shadow 0.3s ease, padding 0.3s ease;
+}
+.back-tab:hover, .back-tab:focus-visible {
+  background-position: 100% 50%;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.3), 0 10px 24px -6px rgb(0 181 226 / 0.45);
+}
+@media (prefers-reduced-motion: reduce) {
+  .back-tab, .back-tab * { transition: none !important; }
+}
+
+/* Botón flotante "Ir arriba": degradado del cian al azul institucional, de abajo hacia arriba. */
+.top-btn {
+  background-image: linear-gradient(0deg, var(--color-acento) 0%, var(--color-acento-osc) 45%, var(--color-titulo) 100%);
+  background-size: 100% 220%;
+  background-position: 50% 100%;
+  transition: background-position 0.5s ease, box-shadow 0.3s ease, opacity 0.3s ease, translate 0.3s ease, transform 0.3s ease;
+}
+.top-btn:hover, .top-btn:focus-visible {
+  background-position: 50% 0%;
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.8), 0 10px 24px -6px rgb(0 181 226 / 0.5);
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .top-btn, .top-btn * { transition: none !important; animation: none !important; }
+  .top-btn:hover { transform: none; }
+}

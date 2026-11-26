@@ -1,0 +1,38 @@
+# /etc/systemd/system/pupe.service
+[Unit]
+Description=PUPE - Objetos perdidos y encontrados CU2
+After=network-online.target postgresql.service
+Wants=network-online.target
+# Si la configuración es inválida, no reintentar sin fin: revisar con journalctl -u pupe.
+StartLimitIntervalSec=60
+StartLimitBurst=3
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=pupe
+Group=pupe
+WorkingDirectory=/opt/pupe
+# Defensa extra: producción aunque falte en el archivo (lo que diga el archivo tiene prioridad).
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/pupe/pupe.env
+ExecStart=/usr/bin/node dist-server/index.js
+Restart=on-failure
+RestartSec=5
+
+# Endurecimiento: el proceso no puede escribir fuera de lo necesario ni escalar privilegios.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+ReadOnlyPaths=/opt/pupe
+
+[Install]
+WantedBy=multi-user.target
